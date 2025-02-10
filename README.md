@@ -17,7 +17,7 @@ The other files (.BAM, .BMP, .TIS, .PVRZ, .WED) can be kept as they are.
 - All areas retain their original filename with "AR" replaced with "QD". 
 - I have maintained the original connectivity between areas, and left the portal zones intact (but without requirements).
 - I have removed all creatures and items from the areas. 
-- Info regions have their original pop-up text but have had their scripts. (If you want a region to activate dialog, you'll need to write your own script for it.)
+- Info regions have their original pop-up text but have had their scripts removed. (If you want a region to activate dialog, you'll need to write your own script for it.)
 - Some animations (mostly lighting effects in the endgame areas) have been excluded due to strange rendering behavior. 
 - Some particularly large wall polygons may not properly shade characters from all positions. This should not impact gameplay.
 - The doors in the maze tiles of the Modron Maze have been ignored due to an inaccessible implementation in PST:EE. 
