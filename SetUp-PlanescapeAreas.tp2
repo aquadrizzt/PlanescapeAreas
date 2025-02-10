@@ -1,0 +1,40 @@
+BACKUP ~weidu_external/backup/PlanescapeAreas~
+SUPPORT ~https://github.com/aquadrizzt~ 
+VERSION ~0.01~ 
+
+LANGUAGE ~English~ ~english~ ~PlanescapeAreas/lang/setup_en.tra~
+LANGUAGE ~Czech~ ~czech~ ~PlanescapeAreas/lang/setup_cs.tra~
+LANGUAGE ~German~ ~german~ ~PlanescapeAreas/lang/setup_de.tra~
+LANGUAGE ~French~ ~french~ ~PlanescapeAreas/lang/setup_fr.tra~
+LANGUAGE ~Korean~ ~korean~ ~PlanescapeAreas/lang/setup_ko.tra~
+LANGUAGE ~Polish~ ~polish~ ~PlanescapeAreas/lang/setup_pl.tra~
+
+BEGIN @0
+
+COPY ~PlanescapeAreas/bam~ ~override~
+	 ~PlanescapeAreas/bmp~ ~override~
+	 ~PlanescapeAreas/tis~ ~override~
+	 ~PlanescapeAreas/wed~ ~override~
+
+COPY ~PlanescapeAreas/are~ ~override~
+	GET_OFFSET_ARRAY regions ARE_V10_REGIONS 
+	PHP_EACH regions AS int => ofs_reg BEGIN 
+		READ_LONG (ofs_reg + 0x64) old_strref
+		PATCH_IF (old_strref > 0) THEN BEGIN 
+			new_strref = RESOLVE_STR_REF  ((AT old_strref))
+			WRITE_LONG (ofs_reg + 0x64) new_strref
+		END 
+	END 
+
+	READ_LONG 0xc8 num_pins 
+	PATCH_IF (num_pins > 0) THEN BEGIN 
+		READ_LONG 0xc4 pin_ofs 
+		FOR (pin_idx = 0 ; pin_idx < num_pins; pin_idx=pin_idx+1) BEGIN 
+			pin_ofs_i = pin_ofs + pin_idx*0x34 
+			READ_LONG (pin_ofs_i + 0x4) old_strref
+			new_strref = RESOLVE_STR_REF  ((AT old_strref))
+			WRITE_LONG (pin_ofs_i + 0x4) new_strref
+		END 
+	END 
+
+
